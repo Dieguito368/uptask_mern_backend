@@ -21,12 +21,20 @@ export class ProjectController {
             res.status(200).json(projects)
         } catch (error) {
             console.log(error);
-                        
         }
     }
 
     static getProjectById = async(req: Request, res: Response) => {
-        console.log(req.params);
-        
+        const { id } = req.params;
+
+        try {
+            const project = await Project.findById(id);
+
+            if(!project) return res.status(404).json({ error: 'Proyecto no encontrado' });
+            
+            res.status(200).json(project);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
