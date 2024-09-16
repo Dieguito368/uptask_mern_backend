@@ -9,7 +9,7 @@ declare global {
     }
 }
 
-export const validateProjectExists = async (req: Request, res: Response, next: NextFunction) => {
+export const projectExists = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { projectId: id } = req.params;
 
@@ -18,12 +18,12 @@ export const validateProjectExists = async (req: Request, res: Response, next: N
         if(!project) {
             const error = new Error('Proyecto no encontrado');
 
-            res.status(404).json({ error: error.message })
+            return res.status(404).json({ error: error.message })
         }
 
         req.project = project;
 
-        next()
+        next();
     } catch (error) {
         res.status(500).json({ error: `Hubo un error: ${error}` });
     }
