@@ -13,41 +13,44 @@ router.post('/',
         .notEmpty().withMessage('El nombre del proyecto es obligatorio'),
     body('clientName')
         .notEmpty().withMessage('El nombre del cliente es obligatorio'),
-    body('projectDescription')
+    body('description')
         .notEmpty().withMessage('La descripción del proyecto es obligatoria'),
     handleInputErrors,
     ProjectController.createProject
 );
 router.get('/', ProjectController.getAllProjects);
-router.get('/:id',
-    param('id')
-        .isMongoId().withMessage('ID no válido'), 
+router.get('/:projectId',
+    param('projectId')
+        .isMongoId().withMessage('ID del proyecto no válido'), 
     handleInputErrors,
+    validateProjectExists,
     ProjectController.getProjectById
 );
-router.put('/:id',
-    param('id')
-        .isMongoId().withMessage('ID no válido'), 
+router.put('/:projectId',
+    param('projectId')
+        .isMongoId().withMessage('ID del proyecto no válido'), 
     body('projectName')
         .notEmpty().withMessage('El nombre del proyecto es obligatorio'),
     body('clientName')
         .notEmpty().withMessage('El nombre del cliente es obligatorio'),
-    body('projectDescription')
+    body('description')
         .notEmpty().withMessage('La descripción del proyecto es obligatoria'),
     handleInputErrors,
+    validateProjectExists,
     ProjectController.updateProject
 );
-router.delete('/:id',
-    param('id')
-        .isMongoId().withMessage('ID no válido'),
+router.delete('/:projectId',
+    param('projectId')
+        .isMongoId().withMessage('ID del proyecto no válido'),
     handleInputErrors,
+    validateProjectExists,
     ProjectController.deleteProject
 )
 
 // Routes for tasks
-router.post('/:id/tasks',
-    param('id').
-        isMongoId().withMessage('ID no válido'),
+router.post('/:projectId/tasks',
+    param('projectId').
+        isMongoId().withMessage('ID del proyecto no válido'),
     body('name')
         .notEmpty().withMessage('El nombre de la tarea es obligatorio'),
     body('description')
@@ -56,11 +59,20 @@ router.post('/:id/tasks',
     validateProjectExists,
     TaskControlller.createTask
 );
-router.get('/:id/tasks',
-    param('id')
-        .isMongoId().withMessage('ID no válido'),
+router.get('/:projectId/tasks',
+    param('projectId')
+        .isMongoId().withMessage('ID del proyecto no válido'),
     handleInputErrors,
     validateProjectExists,
     TaskControlller.getProjectTasks
+)
+router.get('/:projectId/tasks/:taskId',
+    param('projectId')
+        .isMongoId().withMessage('ID del proyecto no válido'),
+    param('taskId')
+        .isMongoId().withMessage('ID de la tarea no válida'),
+    handleInputErrors,
+    validateProjectExists,
+    TaskControlller.getTaskById
 )
 export default router;
