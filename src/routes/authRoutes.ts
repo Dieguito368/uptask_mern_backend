@@ -33,6 +33,13 @@ router.post('/login',
         .notEmpty().withMessage('El password no puede ir vacio'),
     handleInputErrors,
     AuthController.login
+);
+router.post('/request-code',
+    body('email')
+        .notEmpty().withMessage('El email no puede ir vacio')
+        .isEmail().withMessage('Email no válido'),
+    handleInputErrors,
+    AuthController.requestConfirmationCode
 )
 
 export default router;

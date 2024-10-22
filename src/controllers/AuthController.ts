@@ -107,4 +107,42 @@ export class AuthController {
             res.status(500).json(error);
         }
     }
+
+    static requestConfirmationCode = async (req: Request, res: Response) => {
+        try {
+            const { email } = req.body;
+
+            const user = await User.findOne({ email });
+
+            if(!user) {
+                const error = new Error('No logramos encontrar tu cuenta de UpTask');
+
+                return res.status(404).json({ error: error.message });
+            }
+
+            if(user.confirmed) {
+                const error = new Error('Tu cuenta de UpTask ya esta confirmada');
+
+                return res.status(403).json({ error: error.message });
+            }
+
+            // Generar el token
+            const token = new Token();
+            token.token = generateToken();
+            token.user = user.id;
+
+            // Enviar el email
+            AuthEmail.sendConfirmationEmail({
+                name: user.name,
+                email: user.email,
+                token: token.token
+            });
+
+            await Promise.allSettled([ user.save(), token.save() ])
+
+            res.status(200).send('Se envió un nuevo token a tu Email');
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
 }
