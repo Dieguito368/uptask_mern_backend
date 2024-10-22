@@ -19,7 +19,7 @@ export class AuthEmail {
                         <h2 style="color: #444; text-align: center;">¡Bienvenido a UpTask, ${user.name}!</h2> 
                         <p style="font-size: 16px; line-height: 1.5; color: #555;"> Has creado tu cuenta en <strong>UpTask</strong>, ¡ya casi está todo listo! Solo debes confirmar tu cuenta para poder comenzar a usarla. </p> 
                         <p style="font-size: 16px; line-height: 1.5; color: #555;"> Para confirmar tu cuenta, visita el siguiente enlace: </p> <div style="text-align: center; margin: 20px 0;"> 
-                            <a href="" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; font-weight: bold; border-radius: 5px;">Confirmar Cuenta</a> 
+                            <a href="${process.env.FRONTEND_URL}/auth/confirm-account" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; font-weight: bold; border-radius: 5px;">Confirmar Cuenta</a> 
                     </div> 
 
                     <p style="font-size: 16px; line-height: 1.5; color: #555;">También puedes ingresar el siguiente código para confirmar tu cuenta: </p> 

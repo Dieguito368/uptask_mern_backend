@@ -47,7 +47,7 @@ export class AuthController {
 
     static confimAccount = async (req: Request, res: Response) => {
         try {
-            const { token, id } = req.body;
+            const { token } = req.body;
 
             const tokenExists = await Token.findOne({ token })
 
