@@ -5,6 +5,7 @@ import { handleInputErrors } from '../middleware/validation';
 import { TaskControlller } from '../controllers/TaskController';
 import { projectExists } from '../middleware/project';
 import { taskBelongToProject, taskExists } from '../middleware/task';
+import { authenticate } from '../middleware/auth';
 
 const router = Router();
 
@@ -22,6 +23,7 @@ const validateTaskFields = [
 
 // Routes for projects
 router.post('/', 
+    authenticate,
     validateProjectFields,
     handleInputErrors,
     ProjectController.createProject
