@@ -30,14 +30,16 @@ export class AuthController {
             token.token = generateToken();
             token.user = user.id;
 
+            
             // Enviar el email
             AuthEmail.sendConfirmationEmail({
                 name: user.name,
                 email: user.email,
                 token: token.token
             });
-
+            
             await Promise.allSettled([ user.save(), token.save() ])
+            console.log(`Token: ${token.token}, Created At: ${token.createdAt}`);
 
             res.status(200).send('Cuenta creada correctamente, revisa tu email para confirmarla');
         } catch (error) {
@@ -90,6 +92,10 @@ export class AuthController {
                     token: token.token
                 });
 
+                token.save();
+
+                console.log(`Token: ${token.token}, Created At: ${token.createdAt}`);
+
                 const error = new Error('No haz confirmado tu cuenta de UpTask. Hemos enviado un email de confirmación');
                 return res.status(401).json({ error: error.message })
             }
@@ -138,7 +144,9 @@ export class AuthController {
                 token: token.token
             });
 
-            await Promise.allSettled([ user.save(), token.save() ])
+            token.save();
+
+            console.log(`Token: ${token.token}, Created At: ${token.createdAt}`);
 
             res.status(200).send('Se envió un nuevo token a tu Email');
         } catch (error) {
