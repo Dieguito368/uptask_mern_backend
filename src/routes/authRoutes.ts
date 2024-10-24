@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { body } from 'express-validator'; 
 import { AuthController } from '../controllers/AuthController';
 import { handleInputErrors } from '../middleware/validation';
+import { authenticate } from '../middleware/auth';
 
 const router = Router();
 
@@ -40,6 +41,7 @@ router.post('/request-code',
         .isEmail().withMessage('Email no válido'),
     handleInputErrors,
     AuthController.requestConfirmationCode
-)
+);
+router.get('/user', authenticate, AuthController.user);
 
 export default router;

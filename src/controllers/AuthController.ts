@@ -156,4 +156,8 @@ export class AuthController {
             res.status(500).json(error)
         }
     }
+
+    static user = async (req: Request, res: Response) => {
+        res.status(200).json(req.user);
+    }
 }
