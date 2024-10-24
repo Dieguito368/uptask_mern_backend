@@ -21,9 +21,10 @@ const validateTaskFields = [
     body('description').notEmpty().withMessage('La descripción de la tarea es obligatoria'),
 ];
 
+router.use(authenticate);
+
 // Routes for projects
 router.post('/', 
-    authenticate,
     validateProjectFields,
     handleInputErrors,
     ProjectController.createProject

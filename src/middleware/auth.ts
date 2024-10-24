@@ -22,7 +22,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     const token = bearer.split(' ')[1];
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_ECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         if(typeof decoded === 'object' && decoded.id) {
             const user = await User.findById(decoded.id).select('_id name email');
@@ -30,7 +30,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             if(user) {
                 req.user = user;
             } else {
-                res.status(500).json({ error: 'Token no válido' })
+                return res.status(500).json({ error: 'Token no válido' })
             }
         }
     } catch (error) {
