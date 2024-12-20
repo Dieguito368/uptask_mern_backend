@@ -4,8 +4,9 @@ import { ProjectController } from '../controllers/ProjectController';
 import { handleInputErrors } from '../middleware/validation';
 import { TaskControlller } from '../controllers/TaskController';
 import { projectExists } from '../middleware/project';
-import { taskBelongToProject, taskExists } from '../middleware/task';
+import { hasAuthorization, taskBelongToProject, taskExists } from '../middleware/task';
 import { authenticate } from '../middleware/auth';
+import { TeamController } from '../controllers/TeamController';
 
 const router = Router();
 
@@ -56,6 +57,7 @@ router.post('/:projectId/tasks',
     validateTaskFields,
     handleInputErrors,
     projectExists,
+    hasAuthorization,
     TaskControlller.createTask
 );
 router.get('/:projectId/tasks',
@@ -81,6 +83,7 @@ router.put('/:projectId/tasks/:taskId',
     projectExists,
     taskExists,
     taskBelongToProject,
+    hasAuthorization,
     TaskControlller.updateTask
 );
 router.patch('/:projectId/tasks/:taskId',
@@ -102,7 +105,43 @@ router.delete('/:projectId/tasks/:taskId',
     projectExists,
     taskExists,
     taskBelongToProject,
+    hasAuthorization,
     TaskControlller.deleteTask
+);
+
+// Routes for Teams
+router.post('/:projectId/team/find', 
+    validateProjectId,
+    body('email')
+        .notEmpty().withMessage('El email no puede ir vacio.')
+        .isEmail().toLowerCase().withMessage('Email no válido.'),
+    handleInputErrors,
+    projectExists,
+    TeamController.findUserByEmail
+);
+router.get('/:projectId/team', 
+    validateProjectId,
+    handleInputErrors,
+    projectExists,
+    TeamController.getAllProjectMembers
+);
+router.post('/:projectId/team', 
+    validateProjectId,
+    body('id')
+        .notEmpty().withMessage('El ID del usuario no puede ir vacio.')
+        .isMongoId().withMessage('ID no válido.'),
+    handleInputErrors,
+    projectExists,
+    TeamController.addMember
+);
+router.delete('/:projectId/team/:userId', 
+    validateProjectId,
+    param('userId')
+        .notEmpty().withMessage('El ID del usuario no puede ir vacio.')
+        .isMongoId().withMessage('ID no válido.'),
+    handleInputErrors,
+    projectExists,
+    TeamController.removeMember
 );
 
 export default router;
