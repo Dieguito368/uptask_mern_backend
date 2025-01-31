@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import Task, { ITask } from '../models/Tasks';
+import Task, { ITask } from '../models/Task';
 
 declare global {
     namespace Express {
@@ -13,7 +13,7 @@ export const taskExists = async (req: Request, res: Response, next: NextFunction
     try {
         const { taskId: id } = req.params;
 
-        const task = await Task.findById(id);
+        const task = await Task.findById(id).populate('updatedBy.user', 'id name email');
 
         if(!task) {
             const error = new Error('Tarea no encontrada');

@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import Task from '../models/Tasks';
+import Task from '../models/Task';
 
 export class TaskControlller {
     static createTask = async (req: Request, res: Response) => {
@@ -50,6 +50,13 @@ export class TaskControlller {
             const { status } = req.body;
 
             req.task.status = status;
+
+            const data = {
+                user:  req.user.id,
+                status: req.body.status
+            }
+
+            req.task.updatedBy.push(data);
             
             await req.task.save();
 
