@@ -13,7 +13,8 @@ export const taskExists = async (req: Request, res: Response, next: NextFunction
     try {
         const { taskId: id } = req.params;
 
-        const task = await Task.findById(id).populate('updatedBy.user', 'id name email');
+        const task = await Task.findById(id).populate({ path: 'updatedBy.user', select: 'id name email' })
+                                            .populate({ path: 'notes', populate: { path: 'createdBy', select: 'id name email' } });
 
         if(!task) {
             const error = new Error('Tarea no encontrada');

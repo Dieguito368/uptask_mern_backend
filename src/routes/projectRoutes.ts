@@ -145,14 +145,32 @@ router.delete('/:projectId/team/:userId',
 );
 
 // Routes for Notes
-router.get('/:projectId/notes', NoteController.getAllNotes)
+router.get('/:projectId/tasks/:taskId/notes', 
+    validateTaskId,
+    validateProjectId,
+    projectExists,
+    taskExists,
+    taskBelongToProject,
+    NoteController.getTaskNotes
+);
 router.post('/:projectId/tasks/:taskId/notes',
     validateProjectId,
     validateTaskId,
     body('content').notEmpty().withMessage('El contenido de la nota es obligatorio'),
+    projectExists,
     taskExists,
+    taskBelongToProject,
     handleInputErrors,
     NoteController.createNote
+);
+router.delete('/:projectId/tasks/:taskId/notes/:noteId',
+    validateProjectId,
+    validateTaskId,
+    param('noteId').isMongoId().withMessage('ID de la nota no válido'),
+    projectExists,
+    taskExists,
+    taskBelongToProject,
+    NoteController.deleteNote
 );
 
 
