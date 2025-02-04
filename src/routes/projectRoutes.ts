@@ -43,12 +43,14 @@ router.put('/:projectId',
     validateProjectFields,
     handleInputErrors,
     projectExists,
+    hasAuthorization,
     ProjectController.updateProject
 );
 router.delete('/:projectId',
     validateProjectId,
     handleInputErrors,
     projectExists,
+    hasAuthorization,
     ProjectController.deleteProject
 )
 

@@ -5,7 +5,6 @@ export class ProjectController {
     static createProject = async (req: Request, res: Response) => {
         const project = new Project(req.body);
 
-        // Asigna a un manager
         project.manager = req.user.id;
 
         try {
@@ -30,7 +29,7 @@ export class ProjectController {
 
             res.status(200).json(projects)
         } catch (error) {
-            console.log(error);
+            res.status(500).json(error);
         }
     }
 
@@ -40,7 +39,7 @@ export class ProjectController {
 
             res.status(200).json(project);
         } catch (error) {
-            console.log(error);
+            res.status(500).json(error);
         }
     }
 
@@ -50,18 +49,17 @@ export class ProjectController {
 
             res.status(200).send('Proyecto actualizado correctamente');
         } catch (error) {
-            console.log(error);
+            res.status(500).json(error);
         }
     } 
 
     static deleteProject = async (req: Request, res: Response) => {
         try {
-            await Project.findByIdAndDelete(req.project.id);
+            await req.project.deleteOne();
             
             res.status(200).send('Proyecto eliminado correctamente');
         } catch (error) {
-            console.log(error);
-            
+            res.status(500).json(error);
         }
     }
 }
