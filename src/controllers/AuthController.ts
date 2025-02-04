@@ -282,4 +282,18 @@ export class AuthController {
             res.status(500).json(error);
         }
     }
+
+    static checkPassword = async (req: Request, res: Response) => {
+        const user = await User.findById(req.user.id);
+
+        const isPasswordCorrect = await checkPassword(req.body.password, user.password);
+
+        if(!isPasswordCorrect) {
+            const error = new Error('La contraseña no es correcta.');
+
+            return res.status(401).json({ error: error.message });
+        }
+
+        res.status(200).send('Password correcto')
+    }
 }
